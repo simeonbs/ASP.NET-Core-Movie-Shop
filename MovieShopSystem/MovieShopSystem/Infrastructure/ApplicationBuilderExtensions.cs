@@ -35,13 +35,14 @@ namespace MovieShopSystem.Infrastructure
 
             data.Genres.AddRange(new[]
             {
-                new Genre { Name = "Mini" },
-                new Genre { Name = "Economy" },
-                new Genre { Name = "Midsize" },
-                new Genre { Name = "Large" },
-                new Genre { Name = "SUV" },
-                new Genre { Name = "Vans" },
-                new Genre { Name = "Luxury" },
+                new Genre { Name = "Action" },
+                new Genre { Name = "Comedy" },
+                new Genre { Name = "Drama" },
+                new Genre { Name = "Fantasy" },
+                new Genre { Name = "Horror" },
+                new Genre { Name = "Mystery" },
+                new Genre { Name = "Romance" },
+                new Genre { Name = "Thriller" },
             });
 
             data.SaveChanges();
