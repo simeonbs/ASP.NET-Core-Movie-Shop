@@ -236,8 +236,10 @@ namespace MovieShopSystem.Data.Migrations
 
             modelBuilder.Entity("MovieShopSystem.Data.Models.Movie", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Description")
                         .IsRequired()

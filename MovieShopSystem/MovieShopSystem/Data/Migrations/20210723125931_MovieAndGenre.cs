@@ -2,7 +2,7 @@
 
 namespace MovieShopSystem.Data.Migrations
 {
-    public partial class MovieAndGenreTables : Migration
+    public partial class MovieAndGenre : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -23,7 +23,8 @@ namespace MovieShopSystem.Data.Migrations
                 name: "Movies",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     YearReleased = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),

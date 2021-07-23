@@ -9,7 +9,8 @@ namespace MovieShopSystem.Data.Models
     using static DataConstants;
     public class Movie
     {
-        public string Id { get; set; }
+        [Key]
+        public int Id { get; init; }
 
         [Required]
         [MaxLength(40)]

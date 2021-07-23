@@ -10,8 +10,8 @@ using MovieShopSystem.Data;
 namespace MovieShopSystem.Data.Migrations
 {
     [DbContext(typeof(MoviesDbContext))]
-    [Migration("20210722130306_MovieAndGenreTables")]
-    partial class MovieAndGenreTables
+    [Migration("20210723125931_MovieAndGenre")]
+    partial class MovieAndGenre
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -238,8 +238,10 @@ namespace MovieShopSystem.Data.Migrations
 
             modelBuilder.Entity("MovieShopSystem.Data.Models.Movie", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Description")
                         .IsRequired()

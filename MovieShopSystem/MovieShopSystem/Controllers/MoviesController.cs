@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieShopSystem.Data;
+using MovieShopSystem.Data.Models;
 using MovieShopSystem.Models.Movies;
 using System;
 using System.Collections.Generic;
@@ -25,7 +26,34 @@ namespace MovieShopSystem.Controllers
         [HttpPost]
         public IActionResult Add(AddMovieFormModel movie)
         {
-            return View();
+            if (!this.data.Genres.Any(c => c.Id == movie.GenreId))
+            {
+                this.ModelState.AddModelError(nameof(movie.GenreId), "Genre does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                movie.Genres = this.GetMovieGenres();
+
+                return View(movie);
+            }
+
+            var movieData = new Movie
+            {
+               
+                Title = movie.Title,
+                YearReleased = movie.YearReleased,
+                Description = movie.Description,
+                Director = movie.Director,
+                Writer = movie.Writer,
+                ImageUrl = movie.ImageUrl,
+                GenreId = movie.GenreId
+            };
+
+            this.data.Movies.Add(movieData);
+            this.data.SaveChanges();
+
+            return RedirectToAction("Index", "Home");
         }
 
         private IEnumerable<MovieGenreViewModel> GetMovieGenres()
