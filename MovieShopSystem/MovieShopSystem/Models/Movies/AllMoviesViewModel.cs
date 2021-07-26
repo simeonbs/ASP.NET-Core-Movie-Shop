@@ -8,7 +8,7 @@ namespace MovieShopSystem.Models.Movies
 {
     public class AllMoviesViewModel
     {
-        public const int CarsPerPage = 3;
+        public const int MoviesPerPage = 2;
 
         public string Brand { get; init; }
 
@@ -17,7 +17,7 @@ namespace MovieShopSystem.Models.Movies
 
         public int CurrentPage { get; init; } = 1;
 
-        public int TotalCars { get; set; }
+        public int TotalMovies { get; set; }
 
         public AllMoviesSorting Sorting { get; init; }
 

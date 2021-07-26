@@ -18,51 +18,62 @@ namespace MovieShopSystem.Controllers
             this.data = data;
         }
 
-        public IActionResult All(string searchTerm, AllMoviesSorting sorting)
+
+        public IActionResult All([FromQuery]AllMoviesViewModel query)
         {
+
+            
             var moviesQuery = this.data.Movies.AsQueryable();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                moviesQuery = moviesQuery.Where(c => c.Title.Contains(searchTerm.ToLower()));
+                moviesQuery = moviesQuery.Where(c => c.Title.Contains(query.SearchTerm.ToLower()));
             }
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
+            if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 moviesQuery = moviesQuery.Where(m =>
-                    m.Title.ToLower().Contains(searchTerm.ToLower()) ||
-                    m.Description.ToLower().Contains(searchTerm.ToLower()));
+                    m.Title.ToLower().Contains(query.SearchTerm.ToLower()) ||
+                    m.Description.ToLower().Contains(query.SearchTerm.ToLower()));
             }
 
-            moviesQuery = sorting switch
+            moviesQuery = query.Sorting switch
             {
                 AllMoviesSorting.Year => moviesQuery.OrderByDescending(m => m.YearReleased),
                 AllMoviesSorting.Title => moviesQuery.OrderBy(m => m.Title),
                 AllMoviesSorting.DateCreated or _ => moviesQuery.OrderByDescending(m => m.Id)
             };
 
-            var movies = moviesQuery
-                .OrderByDescending(m => m.Id)
-                .Select(m => new MovieListingViewModel
-                {
-                    Id = m.Id,
-                    Title = m.Title,
-                    YearReleased = m.YearReleased,
-                    Description = m.Description,
-                    Director = m.Director,
-                    Writer = m.Writer,
-                    ImageUrl = m.ImageUrl,
-                    Genre = m.Genre.Name
-                })
+            var totalMovies = this.data.Movies.Count();
+
+            var cars = moviesQuery
+               .Skip((query.CurrentPage - 1) * AllMoviesViewModel.MoviesPerPage)
+               .Take(AllMoviesViewModel.MoviesPerPage)
+               .Select(m => new MovieListingViewModel
+               {
+                   Id = m.Id,
+                   Title = m.Title,
+                   YearReleased = m.YearReleased,
+                   Description = m.Description,
+                   Director = m.Director,
+                   Writer = m.Writer,
+                   ImageUrl = m.ImageUrl,
+                   Genre = m.Genre.Name
+               })
+               .ToList();
+
+            var carBrands = this.data
+                .Movies
+                .Select(c => c.Title)
+                .Distinct()
+                .OrderBy(br => br)
                 .ToList();
 
-            return View(new AllMoviesViewModel
-            {
-                Movies = movies,
-                SearchTerm = searchTerm,
-                Sorting = sorting
-            }
-            );
+            
+            query.Movies = cars;
+            query.TotalMovies = totalMovies;
+
+            return View(query);
         }
 
         public IActionResult Add() => View(new AddMovieFormModel
