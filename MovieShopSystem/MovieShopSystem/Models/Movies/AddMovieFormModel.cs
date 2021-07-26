@@ -23,10 +23,12 @@ namespace MovieShopSystem.Models.Movies
         public string Description { get; init; }
 
         [Required]
+        [MinLength(5)]
         [MaxLength(DirectorMaxNameLength)]
         public string Director { get; init; }
 
         [Required]
+        [MinLength(5)]
         [MaxLength(WriterMaxNameLength)]
         public string Writer { get; init; }
         

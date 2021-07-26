@@ -18,6 +18,27 @@ namespace MovieShopSystem.Controllers
             this.data = data;
         }
 
+        public IActionResult All()
+        {
+            var movies = this.data
+                .Movies
+                .OrderByDescending(m => m.Id)
+                .Select(m => new MovieListingViewModel
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    YearReleased = m.YearReleased,
+                    Description = m.Description,
+                    Director = m.Director,
+                    Writer = m.Writer,
+                    ImageUrl = m.ImageUrl,
+                    Genre = m.Genre.Name
+                })
+                .ToList();
+
+            return View(movies);
+        }
+
         public IActionResult Add() => View(new AddMovieFormModel
         {
             Genres = this.GetMovieGenres()
@@ -53,7 +74,7 @@ namespace MovieShopSystem.Controllers
             this.data.Movies.Add(movieData);
             this.data.SaveChanges();
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("All", "Movies");
         }
 
         private IEnumerable<MovieGenreViewModel> GetMovieGenres()
