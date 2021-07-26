@@ -18,10 +18,30 @@ namespace MovieShopSystem.Controllers
             this.data = data;
         }
 
-        public IActionResult All()
+        public IActionResult All(string searchTerm, AllMoviesSorting sorting)
         {
-            var movies = this.data
-                .Movies
+            var moviesQuery = this.data.Movies.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                moviesQuery = moviesQuery.Where(c => c.Title.Contains(searchTerm.ToLower()));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchTerm))
+            {
+                moviesQuery = moviesQuery.Where(m =>
+                    m.Title.ToLower().Contains(searchTerm.ToLower()) ||
+                    m.Description.ToLower().Contains(searchTerm.ToLower()));
+            }
+
+            moviesQuery = sorting switch
+            {
+                AllMoviesSorting.Year => moviesQuery.OrderByDescending(m => m.YearReleased),
+                AllMoviesSorting.Title => moviesQuery.OrderBy(m => m.Title),
+                AllMoviesSorting.DateCreated or _ => moviesQuery.OrderByDescending(m => m.Id)
+            };
+
+            var movies = moviesQuery
                 .OrderByDescending(m => m.Id)
                 .Select(m => new MovieListingViewModel
                 {
@@ -36,7 +56,13 @@ namespace MovieShopSystem.Controllers
                 })
                 .ToList();
 
-            return View(movies);
+            return View(new AllMoviesViewModel
+            {
+                Movies = movies,
+                SearchTerm = searchTerm,
+                Sorting = sorting
+            }
+            );
         }
 
         public IActionResult Add() => View(new AddMovieFormModel

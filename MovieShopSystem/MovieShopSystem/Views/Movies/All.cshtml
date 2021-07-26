@@ -1,17 +1,35 @@
-﻿@model IEnumerable<MovieListingViewModel>
+﻿@model AllMoviesViewModel
 
-
-<div class="row">
-    @foreach (var movie in Model)
-    {
-        <div class="col-md-4">
-            <div class="card mb-3">
-                <img class="card-img-top" src="@movie.ImageUrl" alt="@movie.Title">
-                <div class="card-body text-center">
-                    <h5 class="card-title text-center">@movie.Title</h5>
-                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">View More</a>
-                </div>
+<div class="form-group col-md-4">
+    <form method="get">
+        <div class="form-group">
+            <label asp-for="SearchTerm"></label>
+            <input asp-for="SearchTerm" class="form-control" placeholder="Enter your search keyword!">
+        </div>
+        <div class="form-group">
+            <div class="form-group">
+                <label asp-for="Sorting"></label>
+                <select asp-for="Sorting" class="form-control">
+                    <option value="0" selected>Date Created</option>
+                    <option value="1">Year</option>
+                    <option value="2">Title</option>
+                </select>
             </div>
         </div>
-    }
+    </form>
 </div>
+
+        <div class="row">
+            @foreach (var movie in Model.Movies)
+            {
+                <div class="col-md-4">
+                    <div class="card mb-3">
+                        <img class="card-img-top" src="@movie.ImageUrl" alt="@movie.Title">
+                        <div class="card-body text-center">
+                            <h5 class="card-title text-center">@movie.Title</h5>
+                            <a asp-controller="Cars" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">View More</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
