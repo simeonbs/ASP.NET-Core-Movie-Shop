@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MovieShopSystem.Data.Models;
 using System;
@@ -18,6 +19,8 @@ namespace MovieShopSystem.Data
 
         public DbSet<Genre> Genres { get; init; }
 
+        public DbSet<Manager> Managers { get; init; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -25,6 +28,19 @@ namespace MovieShopSystem.Data
                 .HasOne(c => c.Genre)
                 .WithMany(c => c.Movies)
                 .HasForeignKey(c => c.GenreId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Movie>()
+                .HasOne(m => m.Manager)
+                .WithMany(m => m.Movies)
+                .HasForeignKey(m => m.ManagerId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Manager>()
+                .HasOne<IdentityUser>()
+                .WithOne()
+                .HasForeignKey<Manager>(m => m.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);

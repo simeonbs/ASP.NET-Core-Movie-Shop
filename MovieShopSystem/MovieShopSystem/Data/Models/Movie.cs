@@ -38,6 +38,9 @@ namespace MovieShopSystem.Data.Models
 
         public Genre Genre { get; init; }
 
+        public int ManagerId { get; init; }
+
+        public Manager Manager { get; init; }
 
     }
 }
