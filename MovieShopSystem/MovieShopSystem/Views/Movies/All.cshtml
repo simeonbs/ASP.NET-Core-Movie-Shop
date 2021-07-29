@@ -75,3 +75,9 @@
            asp-route-sorting="@((int)Model.Sorting)">>></a>
     </div>
 </div>
+
+
+@if (!Model.Movies.Any())
+{
+    <h2 class="text-center">No movies found!</h2>
+}

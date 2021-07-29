@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using MovieShopSystem.Data;
 using MovieShopSystem.Data.Models;
+using MovieShopSystem.Infrastructure;
 using MovieShopSystem.Models.Movies;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace MovieShopSystem.Controllers
@@ -76,14 +79,35 @@ namespace MovieShopSystem.Controllers
             return View(query);
         }
 
-        public IActionResult Add() => View(new AddMovieFormModel
+        [Authorize]
+        public IActionResult Add()
         {
-            Genres = this.GetMovieGenres()
-        });
+            if (!this.UserIsManager())
+            {
+                return RedirectToAction(nameof(ManagersController.Create), "Managers");
+            }
+
+            return View(new AddMovieFormModel
+            {
+                Genres = this.GetMovieGenres()
+            });
+        }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Add(AddMovieFormModel movie)
         {
+            var managerId = this.data
+                .Managers
+                .Where(m => m.UserId == this.User.GetId())
+                .Select(m => m.Id)
+                .FirstOrDefault();
+
+            if (managerId == 0)
+            {
+                return RedirectToAction(nameof(ManagersController.Create), "Managers");
+            }
+
             if (!this.data.Genres.Any(c => c.Id == movie.GenreId))
             {
                 this.ModelState.AddModelError(nameof(movie.GenreId), "Genre does not exist.");
@@ -105,7 +129,8 @@ namespace MovieShopSystem.Controllers
                 Director = movie.Director,
                 Writer = movie.Writer,
                 ImageUrl = movie.ImageUrl,
-                GenreId = movie.GenreId
+                GenreId = movie.GenreId,
+                ManagerId = managerId
             };
 
             this.data.Movies.Add(movieData);
@@ -113,6 +138,10 @@ namespace MovieShopSystem.Controllers
 
             return RedirectToAction("All", "Movies");
         }
+        private bool UserIsManager()
+            => this.data
+                .Managers
+                .Any(m => m.UserId == this.User.GetId());
 
         private IEnumerable<MovieGenreViewModel> GetMovieGenres()
             => this.data
