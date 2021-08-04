@@ -3,12 +3,15 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MovieShopSystem.Data;
 using MovieShopSystem.Infrastructure;
+using MovieShopSystem.Services.Movies;
+using MovieShopSystem.Services.Stats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,8 +44,14 @@ namespace MovieShopSystem
                 })
                 .AddEntityFrameworkStores<MoviesDbContext>();
 
-            services
-                .AddControllersWithViews();
+            services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
+            });
+
+            services.AddTransient<IStatsService, StatsService>();
+
+            services.AddTransient<IMovieService, MovieService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

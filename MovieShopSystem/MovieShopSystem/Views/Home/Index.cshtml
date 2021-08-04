@@ -72,18 +72,30 @@
 </div>
 
 
-<div class="jumbotron">
+<div class="mb-5"></div>
 
-
-    <p></p>
-    <ul class="list-group" style="">
-        <li class="list-group-item">
-            <span class="badge">@Model.TotalMovies</span>
-            Total Movies
-        </li>
-        <li class="list-group-item">
-            <span class="badge">@Model.TotalUsers</span>
-            Total Users
-        </li>
-    </ul>
+<div class="row">
+    <div class="col-12 text-center">
+        <button class="btn btn-primary" id="statistics-button">Show Stats</button>
+    </div>
 </div>
+
+<div class="jumbotron d-none" id="statistics">
+    <div class="row">
+        <h2 class="col-md-4 text-center" id="total-movies"></h2>
+        <h2 class="col-md-4 text-center" id="total-users"></h2>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $('#statistics-button').on('click', ev => {
+            $.get('/api/stats', (data) => {
+                $('#total-movies').text(data.totalMovies + " Movies");
+                $('#total-users').text(data.totalUsers + " Users");
+                $('#statistics').removeClass('d-none');
+                $('#statistics-button').hide();
+            });
+        });
+    </script>
+}

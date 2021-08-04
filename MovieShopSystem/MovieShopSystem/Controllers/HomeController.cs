@@ -3,6 +3,7 @@ using MovieShopSystem.Data;
 using MovieShopSystem.Models;
 using MovieShopSystem.Models.Home;
 using MovieShopSystem.Models.Movies;
+using MovieShopSystem.Services.Stats;
 using System.Diagnostics;
 using System.Linq;
 
@@ -10,15 +11,19 @@ namespace MovieShopSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private MoviesDbContext data;
+        private readonly MoviesDbContext data;
+        private readonly IStatsService stats;
 
-        public HomeController(MoviesDbContext data) 
-            => this.data = data;
+        public HomeController(
+            IStatsService stats,
+            MoviesDbContext data)
+        {
+            this.stats = stats;
+            this.data = data;
+        }
 
         public IActionResult Index()
         {
-            var totalMovies = this.data.Movies.Count();
-
             var movies = this.data
                 .Movies
                 .OrderByDescending(m => m.Id)
@@ -33,9 +38,12 @@ namespace MovieShopSystem.Controllers
                 .Take(3)
                 .ToList();
 
+            var stats = this.stats.Total();
+
             return View(new IndexViewModel
             {
-                TotalMovies = totalMovies,
+                TotalMovies = stats.TotalMovies,
+                TotalUsers = stats.TotalUsers,
                 Movies = movies
             });
         }

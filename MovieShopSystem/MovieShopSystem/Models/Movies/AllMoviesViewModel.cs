@@ -19,9 +19,11 @@ namespace MovieShopSystem.Models.Movies
 
         public int TotalMovies { get; set; }
 
+
+
         public AllMoviesSorting Sorting { get; init; }
 
-        public IEnumerable<string> Brands { get; set; }
+        public IEnumerable<string> Titles { get; set; }
 
         public IEnumerable<MovieListingViewModel> Movies { get; set; }
     }
