@@ -73,5 +73,24 @@ namespace MovieShopSystem.Services.Movies
                 .Distinct()
                 .OrderBy(br => br)
                 .ToList();
+
+        public IEnumerable<MovieServiceModel> UsersMovies(string userId)
+        {
+            return this.data
+                .Movies
+                .Where(m => m.Manager.UserId == userId)
+                .Select(m => new MovieServiceModel
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    YearReleased = m.YearReleased,
+                    Description = m.Description,
+                    Director = m.Director,
+                    Writer = m.Writer,
+                    ImageUrl = m.ImageUrl,
+                    Genre = m.Genre.Name
+                })
+                .ToList();
+        }
     }
 }

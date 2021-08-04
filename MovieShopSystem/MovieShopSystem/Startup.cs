@@ -10,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MovieShopSystem.Data;
 using MovieShopSystem.Infrastructure;
+using MovieShopSystem.Services.Managers;
 using MovieShopSystem.Services.Movies;
 using MovieShopSystem.Services.Stats;
 using System;
@@ -50,6 +51,7 @@ namespace MovieShopSystem
             });
 
             services.AddTransient<IStatsService, StatsService>();
+            services.AddTransient<IManagerService, ManagerService>();
 
             services.AddTransient<IMovieService, MovieService>();
         }

@@ -3,7 +3,7 @@
 <link href="~/lib/bootstrap/dist/css/bootstrap-grid.css" rel="stylesheet" />
 
 @{
-    ViewData["Title"] = "All";
+    ViewData["Title"] = "All Movies";
 }
 
 <form method="get">
@@ -36,7 +36,7 @@
                 <img class="card-img-top img-responsive" src="@movie.ImageUrl" alt="@movie.Title">
                 <div class="card-body text-center">
                     <h5 class="card-title text-center">@movie.Title</h5>
-                    <a asp-controller="Cars" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">View More</a>
+                    <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">View</a>
                 </div>
             </div>
         </div>

@@ -14,6 +14,8 @@ namespace MovieShopSystem.Services.Movies
             int currentPage,
             int moviesPerPage);
 
+        IEnumerable<MovieServiceModel> UsersMovies(string userId);
+
         IEnumerable<string> AllMovieTitles();
     }
 }

@@ -54,6 +54,15 @@ namespace MovieShopSystem.Controllers
         }
 
         [Authorize]
+        public IActionResult MyMovies()
+        {
+            var movies = this.movies.UsersMovies(this.User.GetId());
+
+            return View(movies);
+        }
+
+
+        [Authorize]
         public IActionResult Add()
         {
             if (!this.UserIsManager())

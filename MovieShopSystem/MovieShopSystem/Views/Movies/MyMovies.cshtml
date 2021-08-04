@@ -1,0 +1,31 @@
+﻿@model IEnumerable<MovieServiceModel>
+
+@{
+    ViewData["Title"] = "My Movies";
+    ViewBag.AllowEditing = true;
+}
+
+@if (!Model.Any())
+{
+    <h2 class="text-center">You do not have any movies!</h2>
+}
+
+<div class="row">
+    @foreach (var movie in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <img class="card-img-top img-responsive" src="@movie.ImageUrl" alt="@movie.Title">
+                <div class="card-body text-center">
+                    <h5 class="card-title text-center">@movie.Title</h5>
+                    <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">View</a>
+                    @if (ViewBag.AllowEditing == true)
+                    {
+                        <a asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-warning">Edit</a>
+                        <a asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-danger">Delete</a>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+</div>
