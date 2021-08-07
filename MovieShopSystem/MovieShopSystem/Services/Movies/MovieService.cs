@@ -53,7 +53,7 @@ namespace MovieShopSystem.Services.Movies
                    Director = m.Director,
                    Writer = m.Writer,
                    ImageUrl = m.ImageUrl,
-                   Genre = m.Genre.Name
+                   GenreName = m.Genre.Name
                })
                .ToList();
 
@@ -66,6 +66,16 @@ namespace MovieShopSystem.Services.Movies
             };
         }
 
+        public IEnumerable<MovieGenreServiceModel> AllMovieGenres()
+        => this.data
+            .Genres
+            .Select(g => new MovieGenreServiceModel
+            {
+                Id = g.Id,
+                Name = g.Name
+            })
+            .ToList();
+
         public IEnumerable<string> AllMovieTitles() 
             => this.data
                 .Movies
@@ -73,6 +83,45 @@ namespace MovieShopSystem.Services.Movies
                 .Distinct()
                 .OrderBy(br => br)
                 .ToList();
+
+        public MoviesDetailsServiceModel Details(int id)
+        => this.data.Movies.Where(m => m.Id == id)
+            .Select(m => new MoviesDetailsServiceModel
+            {
+                Id = m.Id,
+                Title = m.Title,
+                Description = m.Description,
+                Director = m.Director,
+                GenreName = m.Genre.Name,
+                ImageUrl = m.ImageUrl,
+                Writer = m.Writer,
+                YearReleased = m.YearReleased,
+                ManagerId = m.ManagerId,
+                ManagerName = m.Manager.Name,
+                UserId = m.Manager.UserId
+            })
+            .FirstOrDefault();
+
+        public bool Edit(int id, string title, int yearReleased, string description, string director, string writer, string imageUrl, int genreId)
+        {
+            var movieData = this.data.Movies.Find(id);
+            if (movieData == null)
+            {
+                return false;
+            }
+
+            movieData.Title = title;
+            movieData.YearReleased = yearReleased;
+            movieData.Description = description;
+            movieData.Director = director;
+            movieData.Writer = writer;
+            movieData.ImageUrl = imageUrl;
+            movieData.GenreId = genreId;
+
+            this.data.SaveChanges();
+
+            return true;
+        }
 
         public IEnumerable<MovieServiceModel> UsersMovies(string userId)
         {
@@ -88,7 +137,7 @@ namespace MovieShopSystem.Services.Movies
                     Director = m.Director,
                     Writer = m.Writer,
                     ImageUrl = m.ImageUrl,
-                    Genre = m.Genre.Name
+                    GenreName = m.Genre.Name
                 })
                 .ToList();
         }

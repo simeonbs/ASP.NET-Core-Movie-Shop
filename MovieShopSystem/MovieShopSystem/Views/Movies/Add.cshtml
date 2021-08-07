@@ -1,50 +1,7 @@
-﻿@model AddMovieFormModel
+﻿@model MovieFormModel
 
 @{
     ViewData["Title"] = "Add Movie";
 }
 
-<h2 style="text-align: center;">Add Movie</h2>
-<form method="post">
-    <div class="form-group">
-        <label asp-for="Title">Title</label>
-        <input asp-for="Title" placeholder="Home Alone, The Godfather, etc..." type="text" required="required" class="form-control">
-        <span asp-validation-for="Title" class="small text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Description">Description</label>
-        <input asp-for="Description" placeholder="Write some description here..." type="text" required="required" class="form-control">
-        <span asp-validation-for="Description" class="small text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="YearReleased">Year Released</label>
-        <input asp-for="YearReleased" placeholder="2000,2001,2002, etc..." type="text" required="required" class="form-control">
-        <span asp-validation-for="YearReleased" class="small text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Director">Director</label>
-        <input asp-for="Director" placeholder="Name of the director of the chosen movie..." type="text" required="required" class="form-control">
-        <span asp-validation-for="Director" class="small text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Writer">Writer</label>
-        <input asp-for="Writer" placeholder="Name of the writer of the chosen movie..." type="text" class="form-control">
-        <span asp-validation-for="Writer" class="small text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="ImageUrl"></label>
-        <input asp-for="ImageUrl" class="form-control" placeholder="Your fine URL here...">
-        <span asp-validation-for="ImageUrl" class="small text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="GenreId"></label>
-        <select asp-for="GenreId" class="form-control">
-            @foreach (var genre in Model.Genres)
-            {
-                <option value="@genre.Id">@genre.Name</option>
-            }
-        </select>
-    </div>
-
-    <input class="btn btn-primary" type="submit" value="Save" />
-</form>
+<partial name="_MovieFormPartial" model="@Model" />

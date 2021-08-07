@@ -25,7 +25,7 @@ namespace MovieShopSystem.Controllers
         }
 
 
-        public IActionResult All([FromQuery]AllMoviesViewModel query)
+        public IActionResult All([FromQuery] AllMoviesViewModel query)
         {
             var movies = this.movies.All(
                 query.SearchTerm,
@@ -35,18 +35,18 @@ namespace MovieShopSystem.Controllers
 
             var movieTitles = this.movies.AllMovieTitles();
 
-            
+
             query.Titles = movieTitles;
             query.TotalMovies = movies.TotalMovies;
             query.Movies = movies.Movies.Select(m => new MovieListingViewModel
             {
                 Id = m.Id,
                 Title = m.Title,
-                Description = m.Description, 
+                Description = m.Description,
                 Director = m.Director,
-                Genre = m.Genre,
+                Genre = m.GenreName,
                 ImageUrl = m.ImageUrl,
-                Writer = m.Writer, 
+                Writer = m.Writer,
                 YearReleased = m.YearReleased
             });
 
@@ -70,15 +70,15 @@ namespace MovieShopSystem.Controllers
                 return RedirectToAction(nameof(ManagersController.Create), "Managers");
             }
 
-            return View(new AddMovieFormModel
+            return View(new MovieFormModel
             {
-                Genres = this.GetMovieGenres()
+                Genres = this.movies.AllMovieGenres()
             });
         }
 
         [HttpPost]
         [Authorize]
-        public IActionResult Add(AddMovieFormModel movie)
+        public IActionResult Add(MovieFormModel movie)
         {
             var managerId = this.data
                 .Managers
@@ -98,14 +98,14 @@ namespace MovieShopSystem.Controllers
 
             if (!ModelState.IsValid)
             {
-                movie.Genres = this.GetMovieGenres();
+                movie.Genres = this.movies.AllMovieGenres();
 
                 return View(movie);
             }
 
             var movieData = new Movie
             {
-               
+
                 Title = movie.Title,
                 YearReleased = movie.YearReleased,
                 Description = movie.Description,
@@ -126,15 +126,91 @@ namespace MovieShopSystem.Controllers
                 .Managers
                 .Any(m => m.UserId == this.User.GetId());
 
-        private IEnumerable<MovieGenreViewModel> GetMovieGenres()
-            => this.data
-            .Genres
-            .Select(g => new MovieGenreViewModel
+
+        [Authorize]
+        public IActionResult Edit(int id)
+        {
+            if (!this.UserIsManager())
             {
-                Id = g.Id,
-                Name = g.Name
-            })
-            .ToList();
+                return RedirectToAction(nameof(ManagersController.Create), "Managers");
+            }
+
+            var movie = this.movies.Details(id);
+
+            if (movie.UserId != this.User.GetId())
+            {
+                return BadRequest();
+            }
+
+            return View(new MovieFormModel
+            {
+                Title = movie.Title,
+                YearReleased = movie.YearReleased,
+                Description = movie.Description,
+                Director = movie.Director,
+                Writer = movie.Writer,
+                ImageUrl = movie.ImageUrl,
+                GenreId = movie.GenreId,
+                Genres = this.movies.AllMovieGenres()
+            });
+        }
+
+
+        [HttpPost]
+        [Authorize]
+        public IActionResult Edit(int id, MovieFormModel movie)
+        {
+            var managerId = this.data
+                .Managers
+                .Where(m => m.UserId == this.User.GetId())
+                .Select(m => m.Id)
+                .FirstOrDefault();
+
+            if (managerId == 0)
+            {
+                return RedirectToAction(nameof(ManagersController.Create), "Managers");
+            }
+
+            if (!this.data.Genres.Any(c => c.Id == movie.GenreId))
+            {
+                this.ModelState.AddModelError(nameof(movie.GenreId), "Genre does not exist.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                movie.Genres = this.movies.AllMovieGenres();
+
+                return View(movie);
+            }
+
+            var edited = this.movies.Edit(
+                id,
+                movie.Title,
+                movie.YearReleased,
+                movie.Description,
+                movie.Director,
+                movie.Writer,
+                movie.ImageUrl,
+                movie.GenreId);
+
+            if (!edited)
+            {
+                return BadRequest();
+            }
+
+            this.movies.Edit(
+                id,
+                movie.Title,
+                movie.YearReleased,
+                movie.Description,
+                movie.Director,
+                movie.Writer,
+                movie.ImageUrl,
+                movie.GenreId);
+
+
+            return RedirectToAction(nameof(All));
+        }
 
     }
 }

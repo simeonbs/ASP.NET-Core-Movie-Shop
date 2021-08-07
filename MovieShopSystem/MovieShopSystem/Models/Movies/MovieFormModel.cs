@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MovieShopSystem.Services.Movies;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 namespace MovieShopSystem.Models.Movies
 {
     using static Data.DataConstants;
-    public class AddMovieFormModel
+    public class MovieFormModel
     {
         [Required]
         [MinLength(2)]
@@ -40,6 +41,6 @@ namespace MovieShopSystem.Models.Movies
         [Display(Name = "Genre")]
         public int GenreId { get; init; }
 
-        public IEnumerable<MovieGenreViewModel> Genres { get; set; }
+        public IEnumerable<MovieGenreServiceModel> Genres { get; set; }
     }
 }

@@ -21,6 +21,6 @@ namespace MovieShopSystem.Services.Movies
 
         public string ImageUrl { get; set; }
 
-        public string Genre { get; init; }
+        public string GenreName { get; init; }
     }
 }
