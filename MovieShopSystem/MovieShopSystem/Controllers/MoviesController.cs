@@ -130,14 +130,14 @@ namespace MovieShopSystem.Controllers
         [Authorize]
         public IActionResult Edit(int id)
         {
-            if (!this.UserIsManager())
+            if (!this.UserIsManager() && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(ManagersController.Create), "Managers");
             }
 
             var movie = this.movies.Details(id);
 
-            if (movie.UserId != this.User.GetId())
+            if (movie.UserId != this.User.GetId() && !User.IsAdmin())
             {
                 return BadRequest();
             }
@@ -166,7 +166,7 @@ namespace MovieShopSystem.Controllers
                 .Select(m => m.Id)
                 .FirstOrDefault();
 
-            if (managerId == 0)
+            if (managerId == 0 && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(ManagersController.Create), "Managers");
             }

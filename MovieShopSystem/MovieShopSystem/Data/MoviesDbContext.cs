@@ -8,7 +8,7 @@ using System.Text;
 
 namespace MovieShopSystem.Data
 {
-    public class MoviesDbContext : IdentityDbContext
+    public class MoviesDbContext : IdentityDbContext<User>
     {
         public MoviesDbContext(DbContextOptions<MoviesDbContext> options)
             : base(options)
@@ -38,7 +38,7 @@ namespace MovieShopSystem.Data
 
             builder
                 .Entity<Manager>()
-                .HasOne<IdentityUser>()
+                .HasOne<User>()
                 .WithOne()
                 .HasForeignKey<Manager>(m => m.UserId)
                 .OnDelete(DeleteBehavior.Restrict);

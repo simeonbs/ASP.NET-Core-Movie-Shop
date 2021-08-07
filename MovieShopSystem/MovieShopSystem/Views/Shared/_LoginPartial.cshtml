@@ -1,7 +1,9 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @using MovieShopSystem.Services.Managers
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@using MovieShopSystem.Data.Models
+
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
 @inject IManagerService Managers
 
 <ul class="navbar-nav">
@@ -9,14 +11,15 @@
     {
         var userId = User.GetId();
         var userIsManager = Managers.IsManager(userId);
+        var userIsAdmin = User.IsInRole("Administrator");
 
-    @if (userIsManager)
+    @if (userIsManager && !userIsAdmin)
         {
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="MyMovies">My Movies</a>
     </li>
         }
-        else
+        else if(!userIsAdmin)
         {
     <li class="nav-item">
         <a class="nav-link text-dark" asp-area="" asp-controller="Managers" asp-action="Create">Become Manager</a>

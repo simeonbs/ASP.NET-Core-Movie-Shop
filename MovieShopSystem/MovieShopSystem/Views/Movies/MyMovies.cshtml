@@ -19,7 +19,7 @@
                 <div class="card-body text-center">
                     <h5 class="card-title text-center">@movie.Title</h5>
                     <a asp-controller="Movies" asp-action="Details" asp-route-id="@movie.Id" class="btn btn-primary">View</a>
-                    @if (ViewBag.AllowEditing == true)
+                    @if(ViewBag.AllowEditing == true || User.IsInRole("Administrator"))
                     {
                         <a asp-controller="Movies" asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-warning">Edit</a>
                         <a asp-controller="Movies" asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-danger">Delete</a>
