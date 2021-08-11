@@ -212,5 +212,17 @@ namespace MovieShopSystem.Controllers
             return RedirectToAction(nameof(All));
         }
 
+        //public IActionResult Details(int id, string information)
+        //{
+        //    var movie = this.movies.Details(id);
+
+        //    if (information != movie.GetInformation())
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    return View(movie);
+        //}
+
     }
 }
