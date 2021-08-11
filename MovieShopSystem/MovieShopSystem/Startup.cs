@@ -47,6 +47,8 @@ namespace MovieShopSystem
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<MoviesDbContext>();
 
+            services.AddMemoryCache();
+
             services.AddControllersWithViews(options =>
             {
                 options.Filters.Add<AutoValidateAntiforgeryTokenAttribute>();
