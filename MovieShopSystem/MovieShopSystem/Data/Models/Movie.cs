@@ -17,6 +17,9 @@ namespace MovieShopSystem.Data.Models
         public string Title { get; set; }
 
         [Required]
+        public decimal Price { get; set; }
+
+        [Required]
         [Range(MovieYearMinLength, MovieYearMaxLength)]
         public int YearReleased { get; set; }
 

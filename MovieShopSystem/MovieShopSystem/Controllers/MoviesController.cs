@@ -108,6 +108,7 @@ namespace MovieShopSystem.Controllers
 
                 Title = movie.Title,
                 YearReleased = movie.YearReleased,
+                Price = movie.Price,
                 Description = movie.Description,
                 Director = movie.Director,
                 Writer = movie.Writer,

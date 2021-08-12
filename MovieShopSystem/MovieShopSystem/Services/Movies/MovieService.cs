@@ -48,6 +48,7 @@ namespace MovieShopSystem.Services.Movies
                {
                    Id = m.Id,
                    Title = m.Title,
+                   Price = m.Price,
                    YearReleased = m.YearReleased,
                    Description = m.Description,
                    Director = m.Director,
@@ -90,6 +91,7 @@ namespace MovieShopSystem.Services.Movies
             {
                 Id = m.Id,
                 Title = m.Title,
+                Price = m.Price,
                 Description = m.Description,
                 Director = m.Director,
                 GenreName = m.Genre.Name,
@@ -132,6 +134,7 @@ namespace MovieShopSystem.Services.Movies
                 {
                     Id = m.Id,
                     Title = m.Title,
+                    Price = m.Price,
                     YearReleased = m.YearReleased,
                     Description = m.Description,
                     Director = m.Director,

@@ -9,6 +9,8 @@ namespace MovieShopSystem.Services.Movies
     {
         public int Id { get; init; }
 
+        public decimal Price { get; set; }
+
         public string Title { get; set; }
 
         public int YearReleased { get; set; }
