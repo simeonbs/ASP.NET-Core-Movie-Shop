@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace MovieShopSystem.Controllers
 {
+    using static WebConstants;
     public class MoviesController : Controller
     {
         private readonly IMovieService movies;
@@ -120,6 +121,8 @@ namespace MovieShopSystem.Controllers
             this.data.Movies.Add(movieData);
             this.data.SaveChanges();
 
+            TempData[GlobalMessageKey] = "Your product has been added!";
+
             return RedirectToAction("All", "Movies");
         }
         private bool UserIsManager()
@@ -219,6 +222,36 @@ namespace MovieShopSystem.Controllers
 
 
             return View(movie);
+        }
+
+        [Authorize]
+        public IActionResult Delete(int id)
+        {
+            if (id == 0)
+            {
+                return NotFound();
+            }
+
+            var movie = this.data.Movies.Where(m => m.Id == id).FirstOrDefault();
+
+            var manager = this.data.Managers.Where(m => m.UserId == this.User.GetId()).FirstOrDefault();
+            if (movie.ManagerId != manager.Id && !this.User.IsAdmin())
+            {
+                return Unauthorized();
+            }
+
+            return View(movie);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var movie = this.data.Movies.Where(m => m.Id == id).FirstOrDefault();
+            this.data.Movies.Remove(movie);
+            this.data.SaveChanges();
+            TempData[GlobalMessageKey] = "Successfully deleted!";
+            return RedirectToAction("MyMovies", "Movies");
         }
 
     }

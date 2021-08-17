@@ -1,8 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,13 +9,10 @@ using Microsoft.Extensions.Hosting;
 using MovieShopSystem.Data;
 using MovieShopSystem.Data.Models;
 using MovieShopSystem.Infrastructure;
+using MovieShopSystem.Services.Cart;
 using MovieShopSystem.Services.Managers;
 using MovieShopSystem.Services.Movies;
 using MovieShopSystem.Services.Stats;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieShopSystem
 {
@@ -56,8 +51,8 @@ namespace MovieShopSystem
 
             services.AddTransient<IStatsService, StatsService>();
             services.AddTransient<IManagerService, ManagerService>();
-
             services.AddTransient<IMovieService, MovieService>();
+            services.AddTransient<ICartService, CartService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

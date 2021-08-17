@@ -8,6 +8,6 @@
          <h5 class="card-text">Director: @Model.Director</h5>
          <p class="card-text">Description: @Model.Description</p>
          <p class="card-text">Price: @Model.Price$</p>
-         <a href="#" class="btn btn-primary">Buy</a>
+         <a asp-controller="Cart" asp-action="AddToCart" asp-route-movieId=@Model.Id asp-route-userId=@User.GetId() class="btn btn-primary">Add to cart!</a>
      </div>
 </div>

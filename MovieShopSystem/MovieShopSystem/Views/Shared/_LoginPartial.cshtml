@@ -6,41 +6,50 @@
 @inject UserManager<User> UserManager
 @inject IManagerService Managers
 
-<ul class="navbar-nav">
-    @if (SignInManager.IsSignedIn(User))
-    {
-        var userId = User.GetId();
-        var userIsManager = Managers.IsManager(userId);
-        var userIsAdmin = User.IsInRole("Administrator");
 
-    @if (userIsManager && !userIsAdmin)
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+
+    <ul class="navbar-nav">
+        @if (SignInManager.IsSignedIn(User))
         {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="MyMovies">My Movies</a>
-    </li>
-        }
-        else if(!userIsAdmin)
-        {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="" asp-controller="Managers" asp-action="Create">Become Manager</a>
-    </li>
-        }
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Profile</a>
-    </li>
-    <li class="nav-item">
-        <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-            <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
-        </form>
-    </li>
-    }
-    else
-    {
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
-    </li>
-    }
-</ul>
+            var userId = User.GetId();
+            var userIsManager = Managers.IsManager(userId);
+            var userIsAdmin = User.IsInRole("Administrator");
+
+            if (!userIsAdmin)
+            {
+            <li class="nav-item">
+                <a class="nav-link text-dark font-weight-bold" asp-controller="Cart" asp-action="MyCart" asp-route-userId="@userId">
+                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                </a>
+            </li>
+             }
+            
+            @if (userIsManager && !userIsAdmin)
+            {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Movies" asp-action="MyMovies">My Movies</a>
+            </li> }
+                            else if (!userIsAdmin)
+                            {
+            <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Managers" asp-action="Create">Become Manager</a>
+            </li>}
+                <li class="nav-item">
+                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">My Profile</a>
+                </li>
+                                <li class="nav-item">
+                                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                        <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                                    </form>
+                                </li> }
+                                            else
+                                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Register">Register</a>
+                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Login">Login</a>
+                                                </li>}
+    </ul>
+

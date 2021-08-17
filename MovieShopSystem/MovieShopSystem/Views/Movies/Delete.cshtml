@@ -1,0 +1,54 @@
+﻿@model MovieShopSystem.Data.Models.Movie
+
+@{
+    ViewData["Title"] = "Изтриване на продукт";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<html lang="en">
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>eCommerce Product Detail</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
+    <link href="~/css/DetailsCss.css" rel="stylesheet" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="card">
+            <div class="container-fliud">
+                <div class="wrapper row">
+                    <div class="preview col-md-6">
+
+                        <div class="preview-pic tab-content">
+                            <div class="tab-pane active img-responsive" id="pic-1"><img src="@Model.ImageUrl" /></div>
+                        </div>
+                    </div>
+                    <div class="details col-md-6">
+                        <h3 class="product-title">@Model.Title</h3>
+                        <h5 class="sizes price">
+                            Director:
+                            <span title="@Model.Director">  @Model.Director </span>
+                        </h5>
+                        <h5 class="sizes price">
+                            Price:
+                            <span title="@Model.Price">  @Model.Price$ </span>
+                        </h5>
+                        <h3 class="product-description text-danger mb-4">Do you really want to delete this movie?</h3>
+                        <form asp-action="Delete">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="submit" value="Delete" class="btn btn-danger" /> |
+                            <a asp-action="MyMovies" class="btn btn-primary">No</a>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

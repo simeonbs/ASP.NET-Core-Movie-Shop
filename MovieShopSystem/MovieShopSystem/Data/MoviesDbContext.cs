@@ -21,6 +21,8 @@ namespace MovieShopSystem.Data
 
         public DbSet<Manager> Managers { get; init; }
 
+        public DbSet<Item> CartItems { get; init; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder
@@ -42,6 +44,9 @@ namespace MovieShopSystem.Data
                 .WithOne()
                 .HasForeignKey<Manager>(m => m.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<Item>()
+                .HasKey(x => new { x.MovieId, x.UserId });
 
             base.OnModelCreating(builder);
         }
