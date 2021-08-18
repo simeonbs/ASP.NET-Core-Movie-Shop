@@ -3,11 +3,12 @@
 <div class="card" style="width: 25rem;margin:0 auto;">
     <img src="@Model.ImageUrl" class="card-img-top" />
     <div class="card-body">
-         <h5 class="card-title">@Model.Title - @Model.YearReleased</h5>
-         <h5 class="card-text">Writer: @Model.Writer</h5>
-         <h5 class="card-text">Director: @Model.Director</h5>
-         <p class="card-text">Description: @Model.Description</p>
-         <p class="card-text">Price: @Model.Price$</p>
-         <a asp-controller="Cart" asp-action="AddToCart" asp-route-movieId=@Model.Id asp-route-userId=@User.GetId() class="btn btn-primary">Add to cart!</a>
-     </div>
+        <h5 class="card-title">@Model.Title - @Model.YearReleased</h5>
+        <h5 class="card-text">Genre: @Model.GenreName</h5>
+        <h5 class="card-text">Writer: @Model.Writer</h5>
+        <h5 class="card-text">Director: @Model.Director</h5>
+        <p class="card-text">Description: @Model.Description</p>
+        <p class="card-text">Price: @Model.Price$</p>
+        <a asp-controller="Cart" asp-action="AddToCart" asp-route-movieId=@Model.Id asp-route-userId=@User.GetId() class="btn btn-primary">Add to cart!</a>
+    </div>
 </div>

@@ -1,30 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
-using MovieShopSystem.Data;
 using MovieShopSystem.Models;
 using MovieShopSystem.Models.Home;
+using MovieShopSystem.Services.Movies;
 using MovieShopSystem.Services.Stats;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 
 namespace MovieShopSystem.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly MoviesDbContext data;
         private readonly IStatsService stats;
         private readonly IMemoryCache cache;
+        private readonly IMovieService movies;
 
         public HomeController(
             IStatsService stats,
-            MoviesDbContext data,
-            IMemoryCache cache)
+            IMemoryCache cache,
+            IMovieService movies)
         {
             this.stats = stats;
-            this.data = data;
             this.cache = cache;
+            this.movies = movies;
         }
 
         public IActionResult Index()
@@ -35,19 +34,7 @@ namespace MovieShopSystem.Controllers
 
             if (latestMovies == null)
             {
-                latestMovies = this.data
-                .Movies
-                .OrderByDescending(m => m.Id)
-                .Select(m => new MovieIndexViewModel
-                {
-                    Id = m.Id,
-                    Title = m.Title,
-                    ReleasedYear = m.YearReleased,
-                    Writer = m.Writer,
-                    ImageUrl = m.ImageUrl,
-                })
-                .Take(3)
-                .ToList();
+                latestMovies = this.movies.LatestMovies();
 
                 var cacheOpt = new MemoryCacheEntryOptions()
                     .SetAbsoluteExpiration(TimeSpan.FromMinutes(15));

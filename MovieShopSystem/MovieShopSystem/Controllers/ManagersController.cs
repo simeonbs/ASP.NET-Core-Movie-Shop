@@ -1,18 +1,21 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MovieShopSystem.Data;
 using MovieShopSystem.Data.Models;
 using MovieShopSystem.Infrastructure;
 using MovieShopSystem.Models.Managers;
-using System.Linq;
+using MovieShopSystem.Services.Managers;
 
 namespace MovieShopSystem.Controllers
 {
     public class ManagersController : Controller
     {
-        private readonly MoviesDbContext data;
+        private readonly IManagerService managers;
 
-        public ManagersController(MoviesDbContext data) => this.data = data;
+        public ManagersController(IManagerService managers)
+        {
+            this.managers = managers;
+        }
+
 
         [Authorize]
         public IActionResult Create() => View();
@@ -22,9 +25,7 @@ namespace MovieShopSystem.Controllers
         public IActionResult Create(BecomeManagerFormModel manager)
         {
             var id = this.User.GetId();
-            var isManager = this.data
-                .Managers
-                .Any(m => m.UserId == id);
+            var isManager = this.managers.IsManager(id);
 
             if (isManager)
             {
@@ -43,8 +44,7 @@ namespace MovieShopSystem.Controllers
                 UserId = id
             };
 
-            this.data.Managers.Add(managerData);
-            this.data.SaveChanges();
+            this.managers.AddManager(managerData);
 
             return RedirectToAction("All", "Movies");
         }

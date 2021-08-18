@@ -1,4 +1,6 @@
-﻿using MovieShopSystem.Models.Movies;
+﻿using MovieShopSystem.Data.Models;
+using MovieShopSystem.Models.Home;
+using MovieShopSystem.Models.Movies;
 using System.Collections.Generic;
     
 namespace MovieShopSystem.Services.Movies
@@ -25,6 +27,18 @@ namespace MovieShopSystem.Services.Movies
         IEnumerable<MovieServiceModel> UsersMovies(string userId);
 
         IEnumerable<string> AllMovieTitles();
+
+        List<MovieIndexViewModel> LatestMovies();
+
+        int GetManagerId(string id);
+
+        bool AddMovie(Movie movie);
+
+        bool AnyMovieGenre(MovieFormModel movie);
+
+        Movie GetMovie(int id);
+
+        bool RemoveMovie(Movie movie);
 
         IEnumerable<MovieGenreServiceModel> AllMovieGenres();
     }

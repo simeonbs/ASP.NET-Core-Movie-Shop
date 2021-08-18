@@ -4,6 +4,7 @@ using MovieShopSystem.Data;
 using MovieShopSystem.Data.Models;
 using MovieShopSystem.Infrastructure;
 using MovieShopSystem.Models.Movies;
+using MovieShopSystem.Services.Managers;
 using MovieShopSystem.Services.Movies;
 using System.Linq;
 
@@ -13,12 +14,14 @@ namespace MovieShopSystem.Controllers
     public class MoviesController : Controller
     {
         private readonly IMovieService movies;
-        private MoviesDbContext data;
+        private readonly IManagerService managers;
 
-        public MoviesController(IMovieService movies, MoviesDbContext data)
+        public MoviesController(
+            IMovieService movies,
+            IManagerService managers)
         {
             this.movies = movies;
-            this.data = data;
+            this.managers = managers;
         }
 
 
@@ -62,7 +65,7 @@ namespace MovieShopSystem.Controllers
         [Authorize]
         public IActionResult Add()
         {
-            if (!this.UserIsManager())
+            if (!this.managers.IsManager(this.User.GetId()))
             {
                 return RedirectToAction(nameof(ManagersController.Create), "Managers");
             }
@@ -77,18 +80,14 @@ namespace MovieShopSystem.Controllers
         [Authorize]
         public IActionResult Add(MovieFormModel movie)
         {
-            var managerId = this.data
-                .Managers
-                .Where(m => m.UserId == this.User.GetId())
-                .Select(m => m.Id)
-                .FirstOrDefault();
+            var managerId = this.movies.GetManagerId(this.User.GetId());
 
             if (managerId == 0)
             {
                 return RedirectToAction(nameof(ManagersController.Create), "Managers");
             }
 
-            if (!this.data.Genres.Any(c => c.Id == movie.GenreId))
+            if (!this.movies.AnyMovieGenre(movie))
             {
                 this.ModelState.AddModelError(nameof(movie.GenreId), "Genre does not exist.");
             }
@@ -114,23 +113,17 @@ namespace MovieShopSystem.Controllers
                 ManagerId = managerId
             };
 
-            this.data.Movies.Add(movieData);
-            this.data.SaveChanges();
+            this.movies.AddMovie(movieData);
 
             TempData[GlobalMessageKey] = "Your product has been added!";
 
             return RedirectToAction("All", "Movies");
         }
-        private bool UserIsManager()
-            => this.data
-                .Managers
-                .Any(m => m.UserId == this.User.GetId());
-
 
         [Authorize]
         public IActionResult Edit(int id)
         {
-            if (!this.UserIsManager() && !User.IsAdmin())
+            if (!this.managers.IsManager(this.User.GetId()) && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(ManagersController.Create), "Managers");
             }
@@ -155,23 +148,18 @@ namespace MovieShopSystem.Controllers
             });
         }
 
-
         [HttpPost]
         [Authorize]
         public IActionResult Edit(int id, MovieFormModel movie)
         {
-            var managerId = this.data
-                .Managers
-                .Where(m => m.UserId == this.User.GetId())
-                .Select(m => m.Id)
-                .FirstOrDefault();
+            var managerId = this.movies.GetManagerId(this.User.GetId());
 
             if (managerId == 0 && !User.IsAdmin())
             {
                 return RedirectToAction(nameof(ManagersController.Create), "Managers");
             }
 
-            if (!this.data.Genres.Any(c => c.Id == movie.GenreId))
+            if (!this.movies.AnyMovieGenre(movie))
             {
                 this.ModelState.AddModelError(nameof(movie.GenreId), "Genre does not exist.");
             }
@@ -228,9 +216,10 @@ namespace MovieShopSystem.Controllers
                 return NotFound();
             }
 
-            var movie = this.data.Movies.Where(m => m.Id == id).FirstOrDefault();
+            var movie = this.movies.GetMovie(id);
 
-            var manager = this.data.Managers.Where(m => m.UserId == this.User.GetId()).FirstOrDefault();
+            var manager = this.managers.GetManager(this.User.GetId());
+
             if (movie.ManagerId != manager.Id && !this.User.IsAdmin())
             {
                 return Unauthorized();
@@ -243,12 +232,10 @@ namespace MovieShopSystem.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(int id)
         {
-            var movie = this.data.Movies.Where(m => m.Id == id).FirstOrDefault();
-            this.data.Movies.Remove(movie);
-            this.data.SaveChanges();
+            var movie = this.movies.GetMovie(id);
+            this.movies.RemoveMovie(movie);
             TempData[GlobalMessageKey] = "Successfully deleted!";
             return RedirectToAction("MyMovies", "Movies");
         }
-
     }
 }

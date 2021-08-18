@@ -10,7 +10,6 @@ namespace MovieShopSystem.Controllers.Api
     public class MoviesApiController : ControllerBase
     {
         private readonly IMovieService movies;
-        private readonly MoviesDbContext data;
 
         public MoviesApiController(IMovieService movies)
             => this.movies = movies;

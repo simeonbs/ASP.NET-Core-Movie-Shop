@@ -1,7 +1,10 @@
 ﻿using MovieShopSystem.Data;
+using MovieShopSystem.Models.Home;
 using MovieShopSystem.Models.Movies;
 using System.Collections.Generic;
 using System.Linq;
+using MovieShopSystem.Infrastructure;
+using MovieShopSystem.Data.Models;
 
 namespace MovieShopSystem.Services.Movies
 {
@@ -75,12 +78,34 @@ namespace MovieShopSystem.Services.Movies
             })
             .ToList();
 
+        public int GetManagerId(string id)
+            => this.data
+                .Managers
+                .Where(m => m.UserId == id)
+                .Select(m => m.Id)
+                .FirstOrDefault();
+
         public IEnumerable<string> AllMovieTitles() 
             => this.data
                 .Movies
                 .Select(c => c.Title)
                 .Distinct()
                 .OrderBy(br => br)
+                .ToList();
+
+        public List<MovieIndexViewModel> LatestMovies()
+            => this.data
+                .Movies
+                .OrderByDescending(m => m.Id)
+                .Select(m => new MovieIndexViewModel
+                {
+                    Id = m.Id,
+                    Title = m.Title,
+                    ReleasedYear = m.YearReleased,
+                    Writer = m.Writer,
+                    ImageUrl = m.ImageUrl,
+                })
+                .Take(3)
                 .ToList();
 
         public MoviesDetailsServiceModel Details(int id)
@@ -141,6 +166,26 @@ namespace MovieShopSystem.Services.Movies
                     GenreName = m.Genre.Name
                 })
                 .ToList();
+        }
+
+        public bool AddMovie(Movie movie)
+        {
+            this.data.Movies.Add(movie);
+            this.data.SaveChanges();
+            return true;
+        }
+
+        public bool AnyMovieGenre(MovieFormModel movie)
+            => this.data.Genres.Any(c => c.Id == movie.GenreId);
+
+        public Movie GetMovie(int id)
+            => this.data.Movies.Where(m => m.Id == id).FirstOrDefault();
+
+        public bool RemoveMovie(Movie movie)
+        {
+            this.data.Movies.Remove(movie);
+            this.data.SaveChanges();
+            return true;
         }
     }
 }
