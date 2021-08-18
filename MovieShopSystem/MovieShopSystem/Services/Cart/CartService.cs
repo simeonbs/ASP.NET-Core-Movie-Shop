@@ -1,10 +1,8 @@
 ﻿using MovieShopSystem.Data;
 using MovieShopSystem.Data.Models;
 using MovieShopSystem.Services.Cart.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieShopSystem.Services.Cart
 {

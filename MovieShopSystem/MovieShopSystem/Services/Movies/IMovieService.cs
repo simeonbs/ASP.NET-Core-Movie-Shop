@@ -1,9 +1,6 @@
 ﻿using MovieShopSystem.Models.Movies;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
+    
 namespace MovieShopSystem.Services.Movies
 {
     public interface IMovieService

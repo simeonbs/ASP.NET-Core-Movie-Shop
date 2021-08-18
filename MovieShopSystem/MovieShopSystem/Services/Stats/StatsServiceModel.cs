@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace MovieShopSystem.Services.Stats
+﻿namespace MovieShopSystem.Services.Stats
 {
     public class StatsServiceModel
     {

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 using MovieShopSystem.Data;
 using MovieShopSystem.Models;
 using MovieShopSystem.Models.Home;
-using MovieShopSystem.Models.Movies;
 using MovieShopSystem.Services.Stats;
 using System;
 using System.Collections.Generic;

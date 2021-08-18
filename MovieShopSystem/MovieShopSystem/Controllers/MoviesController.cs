@@ -5,11 +5,7 @@ using MovieShopSystem.Data.Models;
 using MovieShopSystem.Infrastructure;
 using MovieShopSystem.Models.Movies;
 using MovieShopSystem.Services.Movies;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace MovieShopSystem.Controllers
 {

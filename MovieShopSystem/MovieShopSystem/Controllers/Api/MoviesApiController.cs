@@ -1,14 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using MovieShopSystem.Data;
-using MovieShopSystem.Data.Models;
 using MovieShopSystem.Models.Api.Movies;
-using MovieShopSystem.Models.Movies;
 using MovieShopSystem.Services.Movies;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieShopSystem.Controllers.Api
 {

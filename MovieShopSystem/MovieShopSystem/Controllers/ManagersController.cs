@@ -4,10 +4,7 @@ using MovieShopSystem.Data;
 using MovieShopSystem.Data.Models;
 using MovieShopSystem.Infrastructure;
 using MovieShopSystem.Models.Managers;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace MovieShopSystem.Controllers
 {
